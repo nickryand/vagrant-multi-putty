@@ -2,17 +2,20 @@
 
 * Source: https://github.com/nickryand/vagrant-multi-putty
 
-Vagrant ssh allows only one login at a time and is not currently supported on
-Windows. This plugin allows you to use putty to login to VMs.
-Vagrant-multi-putty supports multiple VMs.
+This plugin allows you to use putty to ssh into VMs. It has been tested on
+Windows and should also work on Linux. Multi-vm environments are supported.
 
 ## Installation
 ### Software
 To install this plugin for the gem version of Vagrant:
-    $ gem install vagrant-multi-putty
+```
+$ gem install vagrant-multi-putty
+```
 
 To install under the non-gem installed version of Vagrant:
-    $ vagrant gem install vagrant-multi-putty
+```
+$ vagrant gem install vagrant-multi-putty
+```
 
 ### Putty Binary
 Download: http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html
@@ -62,10 +65,16 @@ There are currently two additional configuration parameters available:
 
 ## Usage
 Basic usage:
-    vagrant putty
+```
+vagrant putty
+```
 
 Login into a single vm in a multiple vm environment:
-    vagrant putty <name of vm>
+```
+vagrant putty <name of vm>
+```
 
 Pass putty options directly to the putty binary:
-    vagrant putty -- -l testuser -i <path to private key>
+```
+vagrant putty -- -l testuser -i <path to private key>
+```
