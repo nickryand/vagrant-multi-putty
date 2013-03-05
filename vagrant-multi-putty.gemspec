@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Nick Downs"]
   s.email       = ["nickryand@gmail.com"]
-  s.license     = ["MIT"]
+  s.licenses    = ["MIT"]
   s.homepage    = "https://github.com/nickryand/vagrant-multi-putty"
   s.summary     = "Vagrant plugin to allow VM ssh with PuTTY (multi-vm supported)"
   s.description = "Vagrant plugin to allow VM ssh with PuTTY (multi-vm supported)"
