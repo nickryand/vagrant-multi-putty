@@ -2,7 +2,7 @@
 require 'rubygems'
 require 'optparse'
 
-module VagrantMuliPutty
+module VagrantMultiPutty
   class Command < Vagrant::Command::Base
     def execute
       options = {}
