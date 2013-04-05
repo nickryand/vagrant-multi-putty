@@ -1,9 +1,16 @@
-
 module VagrantMultiPutty
-  class PuttyConfig < Vagrant::Config::Base
+  class PuttyConfig < Vagrant.plugin(2, :config)
     attr_accessor :username
     attr_accessor :private_key_path
-  end
 
-  Vagrant.config_keys.register(:putty) { PuttyConfig }
+    def initialize
+      @username = UNSET_VALUE
+      @private_key_path = UNSET_VALUE
+    end
+
+    def finalize!
+      @username = nil
+      @private_key_path = nil
+    end
+  end
 end

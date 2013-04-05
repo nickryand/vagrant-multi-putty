@@ -3,7 +3,7 @@ require 'rubygems'
 require 'optparse'
 
 module VagrantMultiPutty
-  class Command < Vagrant::Command::Base
+  class Command < Vagrant.plugin(2, :command)
     def execute
       options = {}
       opts = OptionParser.new do |opts|
@@ -17,7 +17,7 @@ module VagrantMultiPutty
       end
 
       argv = parse_options(opts)
-      return if !argv
+      return -1 if !argv
 
       # This is borrowed from the ssh base command that ships with vagrant.
       # It is used to parse out arguments meant for the putty program.
@@ -34,13 +34,14 @@ module VagrantMultiPutty
       with_target_vms(argv) do |vm|
         # Also borrowed from the base ssh.rb code.
         # Basic checks needed for a putty connection
-        raise Vagrant::Errors::VMNotCreatedError if !vm.created?
-        raise Vagrant::Errors::VMInaccessible if !vm.state == :inaccessible
-        raise Vagrant::Errors::VMNotRunningError if vm.state != :running
+        raise Vagrant::Errors::VMNotCreatedError if !vm.state.id == :not_created
+        raise Vagrant::Errors::VMInaccessible if !vm.state.id == :inaccessible
+        raise Vagrant::Errors::VMNotRunningError if vm.state.id != :running
 
         @logger.info("Launching putty session to: #{vm.name}")
         putty_connect(vm, putty_args, plain_auth=options[:plain_auth])
       end
+      return 0
     end
 
     def putty_connect(vm, args, plain_auth=False)
@@ -50,7 +51,7 @@ module VagrantMultiPutty
       @logger.debug("Putty Private Key: #{pk_path}")
 
       # Load options set in the Vagrantfile
-      ssh_port = vm.config.ssh.port || vm.driver.ssh_port(vm.config.ssh.guest_port)
+      ssh_port = vm.config.ssh.port
       options = [vm.config.ssh.host]
       options += ["-l", vm.config.putty.username || vm.config.ssh.username]
       options += ["-P", ssh_port.to_s]
@@ -68,6 +69,4 @@ module VagrantMultiPutty
       Process.detach(pid)
     end
   end
-
-  Vagrant.commands.register(:putty) { Command }
 end

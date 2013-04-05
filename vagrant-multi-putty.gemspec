@@ -13,8 +13,6 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = ">= 1.4.0"
 
-  s.add_dependency "vagrant", "~> 1.0.5"
-
   s.files        = `git ls-files`.split("\n")
   s.require_path = 'lib'
 end
