@@ -6,15 +6,12 @@ This plugin allows you to use putty to ssh into VMs. It has been tested on
 Windows and should also work on Linux. Multi-vm environments are supported.
 
 ## Installation
+### Vagrant Version Support
+Vagrant > 1.1.X
 ### Software
-To install this plugin for the gem version of Vagrant:
+To install for Vagrant versions > 1.1
 ```
-$ gem install vagrant-multi-putty
-```
-
-To install under the non-gem installed version of Vagrant:
-```
-$ vagrant gem install vagrant-multi-putty
+$ vagrant plugin install vagrant-multi-putty
 ```
 
 ### Putty Binary
