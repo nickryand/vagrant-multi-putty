@@ -39,6 +39,7 @@ module VagrantMultiPutty
     end
 
     def putty_connect(vm, args, plain_auth=False)
+      vm.config.putty.finalize!
       ssh_info = vm.ssh_info
       # If ssh_info is nil, the machine is not ready for ssh.
       raise Vagrant::Errors::SSHNotReady if ssh_info.nil?
