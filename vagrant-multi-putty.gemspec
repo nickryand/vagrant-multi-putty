@@ -10,6 +10,7 @@ Gem::Specification.new do |s|
   s.homepage    = "https://github.com/nickryand/vagrant-multi-putty"
   s.summary     = "Vagrant plugin to allow VM ssh with PuTTY (multi-vm supported)"
   s.description = "Vagrant plugin to allow VM ssh with PuTTY (multi-vm supported)"
+  s.add_dependency "win32-activate"
 
   s.required_rubygems_version = ">= 1.4.0"
 

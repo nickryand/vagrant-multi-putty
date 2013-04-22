@@ -13,6 +13,10 @@ module VagrantMultiPutty
           options[:plain_auth] = p
         end
 
+        opts.on("-m", "--modal", "Wait close putty window.") do
+          options[:modal] = true
+        end
+
         opts.separator ""
       end
 
@@ -33,7 +37,12 @@ module VagrantMultiPutty
       # detach the process from vagrant.
       with_target_vms(argv) do |vm|
         @logger.info("Launching putty session to: #{vm.name}")
-        putty_connect(vm, putty_args, plain_auth=options[:plain_auth])
+        th = putty_connect(vm, putty_args, plain_auth=options[:plain_auth])
+        if vm.config.putty.modal || options[:modal]
+          th.join
+          require 'win32/activate'
+          Win32::Activate.active
+        end
       end
       return 0
     end
