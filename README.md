@@ -59,6 +59,8 @@ There are currently two additional configuration parameters available:
      config.ssh.username.
 *    config.putty.private_key_path: Used to explicity  set the path to the
      private key variable.
+*    config.putty.modal: use putty like modal window mode. Execute putty and
+     wait close putty. You want to get same effect on command line, set '-m' option.
 
 ## Usage
 Basic usage:
