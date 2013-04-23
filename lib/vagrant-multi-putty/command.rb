@@ -13,6 +13,10 @@ module VagrantMultiPutty
           options[:plain_auth] = p
         end
 
+        opts.on("-m", "--modal", "Block on the putty child process (multi-vm processes will open one after another)") do
+          options[:modal] = true
+        end
+
         opts.separator ""
       end
 
@@ -39,7 +43,9 @@ module VagrantMultiPutty
     end
 
     def putty_connect(vm, args, plain_auth=False)
+      # This isn't called by vagrant automatically.
       vm.config.putty.finalize!
+
       ssh_info = vm.ssh_info
       # If ssh_info is nil, the machine is not ready for ssh.
       raise Vagrant::Errors::SSHNotReady if ssh_info.nil?
@@ -65,7 +71,11 @@ module VagrantMultiPutty
       @logger.debug("Putty cmd line options: #{options.to_s}")
       pid = spawn("putty", *options)
       @logger.debug("Putty Child Pid: #{pid}")
-      Process.detach(pid)
+      if vm.config.modal
+        Process.waitpid(pid)
+      else
+        Process.detach(pid)
+      end
     end
   end
 end
