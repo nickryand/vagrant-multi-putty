@@ -61,6 +61,20 @@ There are currently two additional configuration parameters available:
      private key variable.
 *    config.putty.modal: use putty like modal window mode. Execute putty and
      wait close putty. You want to get same effect on command line, set '-m' option.
+*    config.putty.after_modal: Set hook block. Block called after window closed on modal window mode.
+
+ex. your Vagrantfile ( $HOME/.vagrant.d/Vagrantfile )
+```
+Vagrant.configure("2") do |config|
+  # always modal mode
+  config.putty.modal = true
+  # set hook.
+  config.putty.after_modal do
+    require 'win32/activate'
+    Win32::Activate.active
+  end
+end
+```
 
 ## Usage
 Basic usage:
