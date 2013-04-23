@@ -5,7 +5,7 @@ require 'optparse'
 module VagrantMultiPutty
   class Command < Vagrant.plugin(2, :command)
     def execute
-      options = {}
+      options = {:modal => @env.config_global.putty.modal }
       opts = OptionParser.new do |opts|
         opts.banner = "Usage: vagrant putty [vm-name...] [-- extra putty args]"
 
@@ -46,6 +46,8 @@ module VagrantMultiPutty
       unless pids.empty?
         pids.each { |child| Process.waitpid(child) }
       end
+
+      @env.config_global.putty.after_modal_hook.call if options[:modal]
 
       return 0
     end
