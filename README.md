@@ -68,7 +68,7 @@ There are currently a few additional configuration parameters available:
 
 #### Example usage of after_modal post hook
 This is an example which uses the the win32-activate gem written by nazoking. This
-only works on windows since it win32-activate uses the win32 API.
+only works on windows since win32-activate uses the win32 API.
 
 Github Page: https://github.com/nazoking/win32-activate
 
