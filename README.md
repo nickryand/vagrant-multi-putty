@@ -17,9 +17,9 @@ $ vagrant plugin install vagrant-multi-putty
 ### Putty Binary
 Download: http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html
 
-Download the putty executable for your platform and place it's location on your
-PATH variable. Seek your operating system manual for instructions on how to
-modify your PATH variable.
+Download the putty executable for your platform and add it's location to your
+PATH environment variable. Seek your operating system manual for instructions
+on how to modify your PATH variable.
 
 ### SSH Private Key conversion using PuTTYgen
 Download: http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html
@@ -37,7 +37,7 @@ or convert a private key of your own.
  5. Save the key using the filename of "insecure_private_key.ppk".
 
 Note: If you do not explicity set the config.putty.private_key_path variable,
-you need to convert the insecure_private_key and store it with the a ".ppk"
+you need to convert the insecure_private_key and store it with a ".ppk"
 extension. The vagrant-multi-putty plugin appends this extension automatically.
 
 ## Configuration
@@ -53,17 +53,27 @@ vagrant-multi-putty:
 All other config.ssh options should work for vagrant-multi-putty just like they
 do for vagrant ssh.
 
-There are currently two additional configuration parameters available:
+There are currently a few additional configuration parameters available:
 
 *    config.putty.username: Overrides the username set with
      config.ssh.username.
 *    config.putty.private_key_path: Used to explicity  set the path to the
      private key variable.
-*    config.putty.modal: use putty like modal window mode. Execute putty and
-     wait close putty. You want to get same effect on command line, set '-m' option.
-*    config.putty.after_modal: Set hook block. Block called after window closed on modal window mode.
+*    config.putty.modal: change vagrant-multi-putty to use modal window mode.
+     Execute putty and block the terminal until all putty processes have exited.
+     Can be set on the command line with -m or --modal. This is false by default.
+*    config.putty.after_modal: Configure a post hook block that will be called
+     once all child putty processes have exited and modal mode is enabled. The
+     default block is empty.
 
-ex. your Vagrantfile ( $HOME/.vagrant.d/Vagrantfile )
+#### Example usage of after_modal post hook
+This is an example which uses the the win32-activate gem written by nazoking. This
+only works on windows since it win32-activate uses the win32 API.
+
+Github Page: https://github.com/nazoking/win32-activate
+
+After all putty windows are closed, the terminal window used to run the 'vagrant putty'
+command will be brought into focus and placed on top of all open windows.
 ```
 Vagrant.configure("2") do |config|
   # always modal mode
