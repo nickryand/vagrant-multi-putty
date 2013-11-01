@@ -33,21 +33,17 @@ module VagrantMultiPutty
       # (if any) will be the VM names to log into.
       argv = argv - putty_args
 
-      pids = []
       # Since putty is a program with a GUI window, we can perform a spawn and
       # detach the process from vagrant.
       with_target_vms(argv) do |vm|
         @logger.info("Launching putty session to: #{vm.name}")
-        child_pid = putty_connect(vm, putty_args, options)
-        pids << child_pid unless child_pid.nil?
+        putty_connect(vm, putty_args, options)
       end
 
-      # Modal like behavior
-      unless pids.empty?
-        pids.each { |child| Process.waitpid(child) }
+      if options[:modal]
+        Process.wait(0, Process::WNOHANG)
+        @env.config_global.putty.after_modal_hook.call
       end
-
-      @env.config_global.putty.after_modal_hook.call if options[:modal]
 
       return 0
     end
@@ -81,12 +77,7 @@ module VagrantMultiPutty
       @logger.debug("Putty cmd line options: #{options.to_s}")
       pid = spawn("putty", *ssh_options)
       @logger.debug("Putty Child Pid: #{pid}")
-      if options[:modal]
-        return pid
-      else
-        Process.detach(pid)
-      end
-      nil
+      Process.detach(pid)
     end
   end
 end
