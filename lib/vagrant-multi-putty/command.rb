@@ -41,7 +41,7 @@ module VagrantMultiPutty
       end
 
       if options[:modal]
-        Process.wait(0, Process::WNOHANG)
+        Process.waitall
         @env.config_global.putty.after_modal_hook.call
       end
 
