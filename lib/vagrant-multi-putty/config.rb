@@ -19,7 +19,7 @@ module VagrantMultiPutty
 	def finalize!
 	  @username = nil if @username == UNSET_VALUE
 	  @private_key_path = nil if @private_key_path == UNSET_VALUE
-	  @after_modal_hook = Proc{  } if @after_modal_hook == UNSET_VALUE
+	  @after_modal_hook = Proc.new{  } if @after_modal_hook == UNSET_VALUE
 	  @modal = false if @modal == UNSET_VALUE
 	end
 
