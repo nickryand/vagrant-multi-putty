@@ -36,9 +36,17 @@ or convert a private key of your own.
  4. Answer yes when prompted to save without a password.
  5. Save the key using the filename of "insecure_private_key.ppk".
 
-Note: If you do not explicity set the config.putty.private_key_path variable,
-you need to convert the insecure_private_key and store it with a ".ppk"
-extension. The vagrant-multi-putty plugin appends this extension automatically.
+If you do not explicity set the config.putty.private_key_path
+variable, you need to convert the insecure_private_key and store it
+with a ".ppk" extension. The vagrant-multi-putty plugin appends this
+extension automatically.
+
+As of Vagrant 1.4.0, the `config.ssh.private_key_path` variable is converted into
+an array. This allows multiple SSH keys to be passed to ssh. PuTTY does not
+allow for a list of ssh keys via the command line. Therefore, if the
+`config.putty.private_key_path` variable is not set, we attempt to use the first
+key in the `config.ssh.private_key_path` list and append the '.ppk' extension
+to it.
 
 ## Configuration
 Most of the ssh configuration options used to control vagrant ssh also
@@ -57,7 +65,7 @@ There are currently a few additional configuration parameters available:
 
 *    config.putty.username: Overrides the username set with
      config.ssh.username.
-*    config.putty.private_key_path: Used to explicity  set the path to the
+*    config.putty.private_key_path: Used to explicity set the path to the
      private key variable.
 *    config.putty.modal: change vagrant-multi-putty to use modal window mode.
      Execute putty and block the terminal until all putty processes have exited.

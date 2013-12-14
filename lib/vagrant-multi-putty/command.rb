@@ -5,7 +5,8 @@ require 'optparse'
 module VagrantMultiPutty
   class Command < Vagrant.plugin(2, :command)
     def execute
-      options = {:modal => @env.config_global.putty.modal }
+      options = {:modal => @env.config_global.putty.modal,
+                 :plain_auth => false }
       opts = OptionParser.new do |opts|
         opts.banner = "Usage: vagrant putty [vm-name...] [-- extra putty args]"
 
@@ -56,25 +57,27 @@ module VagrantMultiPutty
       # If ssh_info is nil, the machine is not ready for ssh.
       raise Vagrant::Errors::SSHNotReady if ssh_info.nil?
 
-      # The config.putty directive overrides the config.ssh private_key_path directive.
-      private_key = vm.config.putty.private_key_path || "#{ssh_info[:private_key_path]}.ppk"
-      pk_path = File.expand_path("#{private_key}", vm.env.root_path)
-      @logger.debug("Putty Private Key: #{pk_path}")
-
       # Load options from machine ssh_info.
       ssh_options = [ssh_info[:host]]
       # config.putty.username overrides the machines ssh_info username.
       ssh_options += ["-l", vm.config.putty.username || ssh_info[:username]]
       ssh_options += ["-P", ssh_info[:port].to_s]
-      ssh_options += ["-i", pk_path] unless options[:plain_auth]
       ssh_options += ["-X"] if ssh_info[:forward_x11]
       ssh_options += ["-A"] if ssh_info[:forward_agent]
+
+      # Putty only allows one ssh key to be passed with the -i option
+      # so we default to choosing the first default key if it is not
+      # explicitly set.
+      private_key = vm.config.putty.private_key_path ||
+        ssh_info[:private_key_path][0] + ".ppk"
+      @logger.debug("Putty Private Keys: #{private_key.to_s}")
+      ssh_options += ["-i", private_key]
 
       # Add in additional args from the command line.
       ssh_options.concat(args) if !args.nil?
 
       # Spawn putty and detach it so we can move on.
-      @logger.debug("Putty cmd line options: #{options.to_s}")
+      @logger.debug("Putty cmd line options: #{ssh_options.to_s}")
       pid = spawn("putty", *ssh_options)
       @logger.debug("Putty Child Pid: #{pid}")
       Process.detach(pid)
