@@ -71,7 +71,7 @@ module VagrantMultiPutty
       private_key = vm.config.putty.private_key_path ||
         ssh_info[:private_key_path][0] + ".ppk"
       @logger.debug("Putty Private Keys: #{private_key.to_s}")
-      ssh_options += ["-i", private_key]
+      ssh_options += ["-i", private_key] unless options[:plain_auth]
 
       # Add in additional args from the command line.
       ssh_options.concat(args) if !args.nil?
