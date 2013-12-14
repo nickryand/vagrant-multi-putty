@@ -36,7 +36,7 @@ or convert a private key of your own.
  4. Answer yes when prompted to save without a password.
  5. Save the key using the filename of "insecure_private_key.ppk".
 
-If you do not explicity set the config.putty.private_key_path
+If you do not explicity set the `config.putty.private_key_path`
 variable, you need to convert the insecure_private_key and store it
 with a ".ppk" extension. The vagrant-multi-putty plugin appends this
 extension automatically.
@@ -53,24 +53,24 @@ Most of the ssh configuration options used to control vagrant ssh also
 control vagrant-multi-putty. The following Vagrantfile options are NOT used by
 vagrant-multi-putty:
 
-*    config.ssh.max_tries
-*    config.ssh.timeout
-*    config.ssh.private_key_path
-*    config.ssh.shell
+*    `config.ssh.max_tries`
+*    `config.ssh.timeout`
+*    `config.ssh.private_key_path`
+*    `config.ssh.shell`
 
 All other config.ssh options should work for vagrant-multi-putty just like they
 do for vagrant ssh.
 
 There are currently a few additional configuration parameters available:
 
-*    config.putty.username: Overrides the username set with
-     config.ssh.username.
-*    config.putty.private_key_path: Used to explicity set the path to the
+*    `config.putty.username`: Overrides the username set with
+    ` config.ssh.username`.
+*    `config.putty.private_key_path`: Used to explicity set the path to the
      private key variable.
-*    config.putty.modal: change vagrant-multi-putty to use modal window mode.
+*    `config.putty.modal`: change vagrant-multi-putty to use modal window mode.
      Execute putty and block the terminal until all putty processes have exited.
-     Can be set on the command line with -m or --modal. This is false by default.
-*    config.putty.after_modal: Configure a post hook block that will be called
+     Can be set on the command line with `-m` or `--modal`. This is false by default.
+*    `config.putty.after_modal`: Configure a post hook block that will be called
      once all child putty processes have exited and modal mode is enabled. The
      default block is empty.
 
