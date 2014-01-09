@@ -4,6 +4,7 @@ module VagrantMultiPutty
 	attr_accessor :private_key_path
 	attr_accessor :after_modal_hook
 	attr_accessor :modal
+	attr_accessor :session
 
 	def after_modal &proc
 	  @after_modal_hook = proc
@@ -14,6 +15,7 @@ module VagrantMultiPutty
 	  @private_key_path = UNSET_VALUE
 	  @after_modal_hook = UNSET_VALUE
 	  @modal = UNSET_VALUE
+	  @session = UNSET_VALUE
 	end
 
 	def finalize!
@@ -21,6 +23,7 @@ module VagrantMultiPutty
 	  @private_key_path = nil if @private_key_path == UNSET_VALUE
 	  @after_modal_hook = Proc.new{  } if @after_modal_hook == UNSET_VALUE
 	  @modal = false if @modal == UNSET_VALUE
+	  @session = nil if @session == UNSET_VALUE
 	end
 
 	def validate(machine)
