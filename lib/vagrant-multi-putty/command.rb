@@ -57,8 +57,18 @@ module VagrantMultiPutty
       # If ssh_info is nil, the machine is not ready for ssh.
       raise Vagrant::Errors::SSHNotReady if ssh_info.nil?
 
+      ssh_options = []
+
+      # Load a saved putty session if provided. Putty (v0.63 at least) appears
+      # to have a weird bug where a hostname specified on the command line will
+      # not override the hostname in a session unless the hostname comes after
+      # the -load option. This doesn't appear to affect any other command line
+      # options aside from hostname.
+      ssh_options += ["-load", vm.config.putty.session] if
+        vm.config.putty.session
+
       # Load options from machine ssh_info.
-      ssh_options = [ssh_info[:host]]
+      ssh_options += [ssh_info[:host]]
       # config.putty.username overrides the machines ssh_info username.
       ssh_options += ["-l", vm.config.putty.username || ssh_info[:username]]
       ssh_options += ["-P", ssh_info[:port].to_s]

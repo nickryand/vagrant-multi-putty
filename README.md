@@ -73,6 +73,7 @@ There are currently a few additional configuration parameters available:
 *    `config.putty.after_modal`: Configure a post hook block that will be called
      once all child putty processes have exited and modal mode is enabled. The
      default block is empty.
+*    `config.putty.session`: Load settings from a saved putty session.
 
 #### Example usage of after_modal post hook
 This is an example which uses the the win32-activate gem written by nazoking. This
