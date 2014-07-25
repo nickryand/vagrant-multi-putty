@@ -5,7 +5,15 @@ require 'optparse'
 module VagrantMultiPutty
   class Command < Vagrant.plugin(2, :command)
     def execute
-      options = {:modal => @env.config_global.putty.modal,
+      
+      # config_global is deprecated from v1.5
+      if Gem::Version.new(::Vagrant::VERSION) >= Gem::Version.new('1.5')
+        @config = @env.vagrantfile.config
+      else
+        @config = @env.config_global
+      end
+      
+      options = {:modal => @config.putty.modal,
                  :plain_auth => false }
       opts = OptionParser.new do |opts|
         opts.banner = "Usage: vagrant putty [vm-name...] [-- extra putty args]"
@@ -43,7 +51,7 @@ module VagrantMultiPutty
 
       if options[:modal]
         Process.waitall
-        @env.config_global.putty.after_modal_hook.call
+        @config.putty.after_modal_hook.call
       end
 
       return 0
