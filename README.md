@@ -66,7 +66,8 @@ There are currently a few additional configuration parameters available:
 *    `config.putty.username`: Overrides the username set with
     ` config.ssh.username`.
 *    `config.putty.private_key_path`: Used to explicity set the path to the
-     private key variable.
+     private key variable. When set to `:agent`, no private key file is supplied
+     and PuTTY will try private keys loaded by Pageant.
 *    `config.putty.modal`: change vagrant-multi-putty to use modal window mode.
      Execute putty and block the terminal until all putty processes have exited.
      Can be set on the command line with `-m` or `--modal`. This is false by default.
