@@ -87,7 +87,9 @@ module VagrantMultiPutty
       # so we default to choosing the first default key if it is not
       # explicitly set.
       private_key = vm.config.putty.private_key_path ||
-        ssh_info[:private_key_path][0] + ".ppk"
+        get_putty_key_file(ssh_info[:private_key_path][0],
+                           vm.config.putty.convert_key_file)
+
       @logger.debug("Putty Private Keys: #{private_key.to_s}")
       ssh_options += ["-i", private_key] unless
         options[:plain_auth] || private_key == :agent
@@ -100,6 +102,44 @@ module VagrantMultiPutty
       pid = spawn("putty", *ssh_options)
       @logger.debug("Putty Child Pid: #{pid}")
       Process.detach(pid)
+    end
+
+    def get_putty_key_file(openssh_key_file, convert_key_file)
+      putty_key_file = openssh_key_file + ".ppk"
+      # If the Putty key file doesn't exist and we are allowed to by the config,
+      # try to convert the OpenSSH key file to Putty's ppk format using
+      # puttygen-cmd (the command-line program that is available on Unix systems
+      # as puttygen).
+      if not File.exists?(putty_key_file) and convert_key_file
+        @logger.info("Converting SSH key #{openssh_key_file} -> #{putty_key_file}")
+        run_puttygen("-O", "private", "-o", putty_key_file, openssh_key_file)
+      end
+      return putty_key_file
+    end
+
+    def run_puttygen(*options)
+      puttygen = puttygen_binary
+      if puttygen.nil?
+        @logger.warn("puttygen or puttygen-cmd not found")
+      else
+        # Spawn puttygen and wait for it to end.
+        pid = spawn(puttygen_binary, *options)
+        pid, status = Process.wait2(pid)
+        if status.exitstatus != 0
+          @logger.warn("puttygen failed")
+        end
+        return status.exitstatus
+      end
+    end
+
+    def puttygen_binary
+      # On Windows, use the alternative puttygen-cmd name; on otherwise, stick
+      # to the puttygen name.
+      if Vagrant::Util::Platform.windows?
+        return Vagrant::Util::Which.which("puttygen-cmd")
+      else
+        return Vagrant::Util::Which.which("puttygen")
+      end
     end
   end
 end
