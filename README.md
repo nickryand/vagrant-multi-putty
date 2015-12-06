@@ -34,7 +34,7 @@ or convert a private key of your own.
  3. Click the "Save private key" button and store the key right along side the
     insecure key.
  4. Answer yes when prompted to save without a password.
- 5. Save the key using the filename of "insecure_private_key.ppk".
+ 5. Save the key using the filename of "private_key.ppk".
 
 If you do not explicity set the `config.putty.private_key_path`
 variable, you need to convert the insecure_private_key and store it
