@@ -5,6 +5,7 @@ module VagrantMultiPutty
 	attr_accessor :after_modal_hook
 	attr_accessor :modal
 	attr_accessor :session
+	attr_accessor :convert_key_file
 
 	def after_modal &proc
 	  @after_modal_hook = proc
@@ -16,6 +17,7 @@ module VagrantMultiPutty
 	  @after_modal_hook = UNSET_VALUE
 	  @modal = UNSET_VALUE
 	  @session = UNSET_VALUE
+	  @convert_key_file = UNSET_VALUE
 	end
 
 	def finalize!
@@ -24,6 +26,7 @@ module VagrantMultiPutty
 	  @after_modal_hook = Proc.new{  } if @after_modal_hook == UNSET_VALUE
 	  @modal = false if @modal == UNSET_VALUE
 	  @session = nil if @session == UNSET_VALUE
+	  @convert_key_file = true if @convert_key_file == UNSET_VALUE
 	end
 
 	def validate(machine)

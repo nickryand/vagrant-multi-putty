@@ -24,9 +24,18 @@ on how to modify your PATH variable.
 ### SSH Private Key conversion using PuTTYgen
 Download: http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html
 
-Putty uses a custom format for SSH keys. It does not support openssl keys
+Putty uses a custom format for SSH keys. It does not support openssh keys
 directly. Using PuTTYgen, you can convert the private key shipped with vagrant
 or convert a private key of your own.
+
+### Automatic SSH Private Key Conversion
+The plugin can automatically convert the OpenSSH keys used by Vagrant into a key
+format that PuTTY can use. To use this functionality, you need the external
+puttygen-cmd program. A binary for Windows is available at:
+https://bitbucket.org/fk/putty/downloads. Save it to a directory that is in your
+PATH variable and the plugin will convert any supplied OpenSSH keys to the PuTTY
+key format. This also works for the randomly generated default keys that Vagrant
+started using in 1.7.
 
 #### Steps for converting the shipped insecure private key
  1. Open puttygen and click the Conversions -> Import Key menu option.
@@ -75,6 +84,8 @@ There are currently a few additional configuration parameters available:
      once all child putty processes have exited and modal mode is enabled. The
      default block is empty.
 *    `config.putty.session`: Load settings from a saved putty session.
+*    `config.putty.convert_key_file`: Whether to automatically convert the OpenSSH
+     key to a PuTTY key; see above for details. Defaults to true.
 
 #### Example usage of after_modal post hook
 This is an example which uses the the win32-activate gem written by nazoking. This
