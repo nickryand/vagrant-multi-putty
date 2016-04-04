@@ -1,6 +1,10 @@
 # Pieces of this plugin were taken from the bundled vagrant ssh plugin.
 require 'rubygems'
+require 'openssl'
 require 'optparse'
+require 'putty/key'
+
+using PuTTY::Key
 
 module VagrantMultiPutty
   class Command < Vagrant.plugin(2, :command)
@@ -87,7 +91,7 @@ module VagrantMultiPutty
       # so we default to choosing the first default key if it is not
       # explicitly set.
       private_key = vm.config.putty.private_key_path ||
-        ssh_info[:private_key_path][0] + ".ppk"
+        get_putty_key_file(ssh_info[:private_key_path][0])
       @logger.debug("Putty Private Keys: #{private_key.to_s}")
       ssh_options += ["-i", private_key] unless
         options[:plain_auth] || private_key == :agent
@@ -100,6 +104,19 @@ module VagrantMultiPutty
       pid = spawn("putty", *ssh_options)
       @logger.debug("Putty Child Pid: #{pid}")
       Process.detach(pid)
+    end
+    
+    private
+    
+    def get_putty_key_file(ssh_key_path)
+      "#{ssh_key_path}.ppk".tap do |ppk_path|
+        if !File.exist?(ppk_path) || File.mtime(ssh_key_path) > File.mtime(ppk_path)
+          ssh_key = OpenSSL::PKey.read(File.read(ssh_key_path, mode: 'rb'))
+          ppk = ssh_key.to_ppk
+          ppk.comment = "Converted by vagrant-multi-putty at #{Time.now}"
+          ppk.save(ppk_path)
+        end
+      end
     end
   end
 end

@@ -11,8 +11,11 @@ Gem::Specification.new do |s|
   s.summary     = "Vagrant plugin to allow VM ssh with PuTTY (multi-vm supported)"
   s.description = "Vagrant plugin to allow VM ssh with PuTTY (multi-vm supported)"
 
+  s.required_ruby_version = ">= 2.1.0"
   s.required_rubygems_version = ">= 1.4.0"
 
   s.files        = `git ls-files`.split("\n")
   s.require_path = 'lib'
+  
+  s.add_runtime_dependency "putty-key", "~> 1.0"
 end

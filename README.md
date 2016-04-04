@@ -21,32 +21,14 @@ Download the putty executable for your platform and add it's location to your
 PATH environment variable. Seek your operating system manual for instructions
 on how to modify your PATH variable.
 
-### SSH Private Key conversion using PuTTYgen
-Download: http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html
-
-Putty uses a custom format for SSH keys. It does not support openssl keys
-directly. Using PuTTYgen, you can convert the private key shipped with vagrant
-or convert a private key of your own.
-
-#### Steps for converting the shipped insecure private key
- 1. Open puttygen and click the Conversions -> Import Key menu option.
- 2. Select the insecure_private_key located at ~/.vagrant.d/insecure_private_key
- 3. Click the "Save private key" button and store the key right along side the
-    insecure key.
- 4. Answer yes when prompted to save without a password.
- 5. Save the key using the filename of "private_key.ppk".
-
-If you do not explicity set the `config.putty.private_key_path`
-variable, you need to convert the insecure_private_key and store it
-with a ".ppk" extension. The vagrant-multi-putty plugin appends this
-extension automatically.
+### SSH Private Key conversion
+SSH keys will be automatically converted to the ppk format used by putty.
 
 As of Vagrant 1.4.0, the `config.ssh.private_key_path` variable is converted into
 an array. This allows multiple SSH keys to be passed to ssh. PuTTY does not
 allow for a list of ssh keys via the command line. Therefore, if the
 `config.putty.private_key_path` variable is not set, we attempt to use the first
-key in the `config.ssh.private_key_path` list and append the '.ppk' extension
-to it.
+key in the `config.ssh.private_key_path` list.
 
 ## Configuration
 Most of the ssh configuration options used to control vagrant ssh also
@@ -55,7 +37,6 @@ vagrant-multi-putty:
 
 *    `config.ssh.max_tries`
 *    `config.ssh.timeout`
-*    `config.ssh.private_key_path`
 *    `config.ssh.shell`
 
 All other config.ssh options should work for vagrant-multi-putty just like they
