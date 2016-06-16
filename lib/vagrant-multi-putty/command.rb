@@ -80,7 +80,7 @@ module VagrantMultiPutty
         vm.config.putty.session
 
       # Load options from machine ssh_info.
-      ssh_options += [ssh_info[:host]]
+      ssh_options += ["-ssh", ssh_info[:host]]
       # config.putty.username overrides the machines ssh_info username.
       ssh_options += ["-l", vm.config.putty.username || ssh_info[:username]]
       ssh_options += ["-P", ssh_info[:port].to_s]
