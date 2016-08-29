@@ -9,14 +9,14 @@ using PuTTY::Key
 module VagrantMultiPutty
   class Command < Vagrant.plugin(2, :command)
     def execute
-      
+
       # config_global is deprecated from v1.5
       if Gem::Version.new(::Vagrant::VERSION) >= Gem::Version.new('1.5')
         @config = @env.vagrantfile.config
       else
         @config = @env.config_global
       end
-      
+
       options = {:modal => @config.putty.modal,
                  :plain_auth => false }
       opts = OptionParser.new do |opts|
@@ -101,13 +101,13 @@ module VagrantMultiPutty
 
       # Spawn putty and detach it so we can move on.
       @logger.debug("Putty cmd line options: #{ssh_options.to_s}")
-      pid = spawn("putty", *ssh_options)
+      pid = spawn(@config.putty.ssh_client, *ssh_options)
       @logger.debug("Putty Child Pid: #{pid}")
       Process.detach(pid)
     end
-    
+
     private
-    
+
     def get_putty_key_file(ssh_key_path)
       "#{ssh_key_path}.ppk".tap do |ppk_path|
         if !File.exist?(ppk_path) || File.mtime(ssh_key_path) > File.mtime(ppk_path)
