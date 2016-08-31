@@ -5,7 +5,8 @@ module VagrantMultiPutty
     name "vagrant-multi-putty"
     description <<-DESC
       Vagrant-multi-putty allows you to ssh into your virtual machines using the putty
-      program. This plugin also supports opening putty sessions into multi-vm environments.
+      program (or other compatible ssh clients like kitty). This plugin also supports
+      opening putty sessions into multi-vm environments.
     DESC
 
     command "putty" do
