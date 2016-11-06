@@ -1,3 +1,9 @@
+v1.6.0 (2016-11-03)
+-------------------
+
+FEATURES:
+ * Added the ability to override the path to the putty or putty like binary via `config.putty.ssh_client`. [GH-22]
+
 v1.5.0 (2016-04-04)
 -------------------
 
