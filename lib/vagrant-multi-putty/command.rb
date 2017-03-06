@@ -96,6 +96,16 @@ module VagrantMultiPutty
       ssh_options += ["-i", private_key] unless
         options[:plain_auth] || private_key == :agent
 
+      # Set Connection type to -ssh, in cases other protocol
+      # stored in Default Settings of Putty.
+      if vm.config.putty.ssh_options
+        if vm.config.putty.ssh_options.class == Array
+          ssh_options += vm.config.putty.ssh_options
+        else
+          ssh_options += [vm.config.putty.ssh_options]
+        end
+      end
+
       # Add in additional args from the command line.
       ssh_options.concat(args) if !args.nil?
 

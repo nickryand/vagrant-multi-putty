@@ -56,7 +56,12 @@ There are currently a few additional configuration parameters available:
      once all child putty processes have exited and modal mode is enabled. The
      default block is empty.
 *    `config.putty.session`: Load settings from a saved putty session.
-*    `config.putty.ssh_client`: Allow end users to control the path to the putty or putty like (kitty for example) binary.
+*    `config.putty.ssh_client`: Allow end users to control the path to the putty
+     or putty like (kitty for example) binary.
+	 Use slashes (not backslashes) for full path under Windows, for example:
+	 config.putty.ssh_client = "C:/Program Files (x86)/PuTTY/putty.exe"
+*    `config.putty.ssh_options`: Allow end users define the Connection type or
+     any other arguments. Default is `-ssh`.
 
 #### Example usage of after_modal post hook
 This is an example which uses the the win32-activate gem written by nazoking. This
