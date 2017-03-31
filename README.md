@@ -58,10 +58,10 @@ There are currently a few additional configuration parameters available:
 *    `config.putty.session`: Load settings from a saved putty session.
 *    `config.putty.ssh_client`: Allow end users to control the path to the putty
      or putty like (kitty for example) binary.
-	 Use slashes (not backslashes) for full path under Windows, for example:
-	 config.putty.ssh_client = "C:/Program Files (x86)/PuTTY/putty.exe"
+     Use slashes (not backslashes) for full path under Windows, for example:
+     `config.putty.ssh_client = "C:/Program Files (x86)/PuTTY/putty.exe"`
 *    `config.putty.ssh_options`: Allow end users define the Connection type or
-     any other arguments. Default is `-ssh`.
+     any other arguments. Multiple options separaed by comma. Default is `-ssh`.
 
 #### Example usage of after_modal post hook
 This is an example which uses the the win32-activate gem written by nazoking. This
@@ -80,6 +80,24 @@ Vagrant.configure("2") do |config|
     require 'win32/activate'
     Win32::Activate.active
   end
+end
+```
+
+#### Example multiple tunnels
+This example sets the path to your PuTTY installation.
+The ssh_options are used to enable a tunnel from host port 8008 to port 80 on guest.
+The second tunnel is a reverse tunnel from guest port 6000 back to the host port 6000,
+so you can use Xming as Xserver on your host as output for X11, for example
+`DISPLAY=localhost:0.0 xclock`.
+```
+Vagrant.configure("2") do |config|
+  # Set PATH for PuTTY
+  config.putty.ssh_client = "C:/Program Files (x86)/PuTTY/putty.exe"
+  # Overwrite default options with SSH as protocol,
+  # enable tunnel from host port 8008 to guest port 80, and set
+  # reverse tunnel from guest port 6000 to host port 6000.
+  config.putty.ssh_options = "-ssh", "-L", "8008:localhost:80", "-R", "6000:localhost:6000"
+  #
 end
 ```
 
