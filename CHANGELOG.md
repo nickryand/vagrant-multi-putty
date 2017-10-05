@@ -1,3 +1,9 @@
+v1.6.1 (2017-10-05)
+-------------------
+
+FEATURES:
+ * Added the option to run WinSCP instead of putty.
+
 v1.6.0 (2016-11-03)
 -------------------
 
