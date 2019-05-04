@@ -18,7 +18,8 @@ module VagrantMultiPutty
       end
 
       options = {:modal => @config.putty.modal,
-                 :plain_auth => false }
+                 :plain_auth => false,
+                 :scp => false }
       opts = OptionParser.new do |opts|
         opts.banner = "Usage: vagrant putty [vm-name...] [-- extra putty args]"
 
@@ -28,6 +29,10 @@ module VagrantMultiPutty
 
         opts.on("-m", "--modal", "Block until all spawned putty processes have exited") do |m|
           options[:modal] = m
+        end
+
+        opts.on("-s", "--scp", "Run WinSCP instead of putty") do |s|
+          options[:scp] = s
         end
 
         opts.separator ""
@@ -70,6 +75,7 @@ module VagrantMultiPutty
       raise Vagrant::Errors::SSHNotReady if ssh_info.nil?
 
       ssh_options = []
+      scp_options = []
 
       # Load a saved putty session if provided. Putty (v0.63 at least) appears
       # to have a weird bug where a hostname specified on the command line will
@@ -78,6 +84,8 @@ module VagrantMultiPutty
       # options aside from hostname.
       ssh_options += ["-load", vm.config.putty.session] if
         vm.config.putty.session
+
+      scp_options += ["scp://" + (vm.config.putty.username || ssh_info[:username]).to_s + "@" + ssh_info[:host] + ":" + ssh_info[:port].to_s]
 
       # Load options from machine ssh_info.
       ssh_options += [ssh_info[:host]]
@@ -105,14 +113,21 @@ module VagrantMultiPutty
           ssh_options += [vm.config.putty.ssh_options]
         end
       end
+      scp_options += ["/privatekey=" + private_key]
 
       # Add in additional args from the command line.
       ssh_options.concat(args) if !args.nil?
 
-      # Spawn putty and detach it so we can move on.
-      @logger.debug("Putty cmd line options: #{ssh_options.to_s}")
-      pid = spawn(@config.putty.ssh_client, *ssh_options)
-      @logger.debug("Putty Child Pid: #{pid}")
+      # Spawn putty/SCP and detach it so we can move on.
+      if options[:scp]
+        @logger.debug("SCP cmd line options: #{scp_options.to_s}")
+        pid = spawn(@config.putty.scp_client, *scp_options)
+        @logger.debug("SCP child pid: #{pid}")
+      else
+        @logger.debug("Putty cmd line options: #{ssh_options.to_s}")
+        pid = spawn(@config.putty.ssh_client, *ssh_options)
+        @logger.debug("Putty Child Pid: #{pid}")
+      end
       Process.detach(pid)
     end
 
