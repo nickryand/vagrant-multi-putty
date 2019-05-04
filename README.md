@@ -58,8 +58,10 @@ There are currently a few additional configuration parameters available:
 *    `config.putty.session`: Load settings from a saved putty session.
 *    `config.putty.ssh_client`: Allow end users to control the path to the putty
      or putty like (kitty for example) binary.
+*    `config.putty.scp_client`: Allow end users to control the path to the WinSCP binary.
      Use slashes (not backslashes) for full path under Windows, for example:
-     `config.putty.ssh_client = "C:/Program Files (x86)/PuTTY/putty.exe"`
+     `config.putty.ssh_client = "C:/Program Files (x86)/PuTTY/putty.exe"` and 
+     `config.putty.scp_client = "C:/Program Files (x86)/WinSCP/WinSCP.exe"`
 *    `config.putty.ssh_options`: Allow end users define the Connection type or
      any other arguments. Multiple options separaed by comma. Default is `-ssh`.
 
@@ -115,4 +117,9 @@ vagrant putty <name of vm>
 Pass putty options directly to the putty binary:
 ```
 vagrant putty -- -l testuser -i <path to private key>
+```
+
+Run WinSCP instead of putty:
+```
+vagrant putty --scp
 ```

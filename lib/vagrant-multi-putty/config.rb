@@ -7,6 +7,7 @@ module VagrantMultiPutty
 	attr_accessor :session
 	attr_accessor :ssh_client
 	attr_accessor :ssh_options
+	attr_accessor :scp_client
 
 	def after_modal &proc
 	  @after_modal_hook = proc
@@ -20,6 +21,7 @@ module VagrantMultiPutty
 	  @session = UNSET_VALUE
 	  @ssh_client = UNSET_VALUE
 	  @ssh_options = UNSET_VALUE
+	  @scp_client = UNSET_VALUE
 	end
 
 	def finalize!
@@ -30,6 +32,7 @@ module VagrantMultiPutty
 	  @session = nil if @session == UNSET_VALUE
 	  @ssh_client = "putty" if @ssh_client == UNSET_VALUE
 	  @ssh_options = "-ssh" if @ssh_options == UNSET_VALUE
+	  @scp_client = "winscp.exe" if @scp_client == UNSET_VALUE
 	end
 
 	def validate(machine)
